@@ -1,7 +1,7 @@
 #! /bin/bash
 
 dockerfile_path="$PWD/dockerfile"
-project_path="$PWD/project/{src,spec,conf}"
+project_path="$PWD/project/{src,specs,conf}"
 host_port=8080
 docker_port=256
 container_name="certora_container"
@@ -44,18 +44,14 @@ function start_container () {
 				if [[ $verbose == "true" ]]; then
 					docker run -it -d \
 						-e CERTORAKEY=$certora_key \
-						--mount type=bind,src="$(pwd)"/project/conf,dst=/project/conf \
-						--mount type=bind,src="$(pwd)"/project/specs,dst=/project/specs \
-						--mount type=bind,src="$(pwd)"/project/src,dst=/project/src \
+						--mount type=bind,src="$(pwd)"/project,dst=/project \
 						-p $host_port:$docker_port \
 						--name $container_name \
 						$image_name 2>&1
 				else
 					docker run -it -d \
 						-e CERTORAKEY=$certora_key \
-						--mount type=bind,src="$(pwd)"/project/conf,dst=/project/conf \
-						--mount type=bind,src="$(pwd)"/project/specs,dst=/project/specs \
-						--mount type=bind,src="$(pwd)"/project/src,dst=/project/src \
+						--mount type=bind,src="$(pwd)"/project,dst=/project \
 						-p $host_port:$docker_port \
 						--name $container_name \
 						$image_name >> out 2>&1
